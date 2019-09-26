@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const UserList = ({ login, avatar_url, html_url }) => (
+const UserList = ({ user: { login, avatar_url, html_url } }) => (
   <div className='card text-center'>
     <img src={avatar_url} alt={login} style={{ width: '60px' }} />
     <h3>{login}</h3>
@@ -9,4 +10,9 @@ const UserList = ({ login, avatar_url, html_url }) => (
     </a>
   </div>
 );
+
+UserList.propTypes = {
+  user: PropTypes.object.isRequired
+};
+
 export default UserList;
