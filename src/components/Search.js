@@ -1,52 +1,48 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-class Search extends Component {
-  state = {
-    text: ''
-  };
+const Search = ({ alertMessage, clearAlert, searchUser }) => {
+  const [text, setText] = useState('');
 
-  static propTypes = {
-    searchUser: PropTypes.func.isRequired,
-    alertMessage: PropTypes.func.isRequired,
-    clearAlert: PropTypes.func.isRequired
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (this.state.text === '') {
-      this.props.alertMessage('Please enter something', 'light');
+    if (text === '') {
+      alertMessage('Please enter something', 'light');
     } else {
-      this.props.clearAlert();
-      this.props.searchUser(this.state.text);
-      this.setState({ text: '' });
+      clearAlert();
+      searchUser(text);
+      setText('');
     }
   };
 
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+  const handleChange = e => {
+    setText(e.target.value);
   };
 
-  render() {
-    return (
-      <div>
-        <form className='form' onSubmit={this.handleSubmit}>
-          <input
-            type='text'
-            name='text'
-            placeholder='Search for GitHub Users'
-            value={this.state.text}
-            onChange={this.handleChange}
-          />
-          <input
-            type='submit'
-            value='Search'
-            className='btn btn-dark btn-block'
-          />
-        </form>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <form className='form' onSubmit={handleSubmit}>
+        <input
+          type='text'
+          name='text'
+          placeholder='Search for GitHub Users'
+          value={text}
+          onChange={handleChange}
+        />
+        <input
+          type='submit'
+          value='Search'
+          className='btn btn-dark btn-block'
+        />
+      </form>
+    </div>
+  );
+};
+
+Search.propTypes = {
+  searchUser: PropTypes.func.isRequired,
+  alertMessage: PropTypes.func.isRequired,
+  clearAlert: PropTypes.func.isRequired
+};
 
 export default Search;
