@@ -1,18 +1,25 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+
 import UserList from './UserList';
-import PropTypes from 'prop-types';
+import GithubContext from '../context/github/githubContext';
 
-const Users = ({ users, loading }) => (
-  <div style={userStyles}>
-    {users.map(user => (
-      <UserList key={user.id} user={user} />
-    ))}
-  </div>
-);
+const Users = () => {
+  const githubContext = useContext(GithubContext);
 
-Users.propTypes = {
-  users: PropTypes.array.isRequired,
-  loading: PropTypes.bool.isRequired
+  useEffect(() => {
+    githubContext.fetchInitialUsers();
+    // eslint-disable-next-line
+  }, []);
+
+  const { users } = githubContext;
+
+  return (
+    <div style={userStyles}>
+      {users.map(user => (
+        <UserList key={user.id} user={user} />
+      ))}
+    </div>
+  );
 };
 
 const userStyles = {

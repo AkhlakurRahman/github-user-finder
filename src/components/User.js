@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Repo from './Repos';
 
-const User = ({ user, repos, match, getSingleUserRepos, getSingleUser }) => {
+import Repo from './Repos';
+import GithubContext from '../context/github/githubContext';
+
+const User = ({ match }) => {
+  const githubContext = useContext(GithubContext);
+
   useEffect(() => {
-    getSingleUser(match.params.login);
-    getSingleUserRepos(match.params.login);
+    githubContext.getSingleUser(match.params.login);
+    githubContext.getSingleUserRepos(match.params.login);
     // eslint-disable-next-line
   }, []);
 
@@ -24,7 +27,7 @@ const User = ({ user, repos, match, getSingleUserRepos, getSingleUser }) => {
     public_repos,
     public_gists,
     hireable
-  } = user;
+  } = githubContext.user;
 
   return (
     <>
@@ -89,17 +92,9 @@ const User = ({ user, repos, match, getSingleUserRepos, getSingleUser }) => {
         <div className='badge badge-light'>Public Repos: {public_repos}</div>
         <div className='badge badge-dark'>Public Gists: {public_gists}</div>
       </div>
-      <Repo repos={repos} />
+      <Repo repos={githubContext.repos} />
     </>
   );
-};
-
-User.propTypes = {
-  loading: PropTypes.bool,
-  getSingleUser: PropTypes.func.isRequired,
-  getSingleUserRepos: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
-  repos: PropTypes.array.isRequired
 };
 
 export default User;
