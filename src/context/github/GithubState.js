@@ -5,6 +5,18 @@ import GitHubReducer from './githubReducer';
 
 import * as actionTypes from '../actionTypes';
 
+// Production level code
+let githubClientId;
+let githubClientSecret;
+
+if (process.env.NODE_ENV !== 'production') {
+  githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
+  githubClientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
+} else {
+  githubClientId = process.env.GITHUB_CLIENT_ID;
+  githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+}
+
 const GithubState = props => {
   const initialState = {
     users: [],
@@ -19,7 +31,7 @@ const GithubState = props => {
   const fetchInitialUsers = async () => {
     setLoading();
     const response = await axios.get(
-      `https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/users?client_id=${githubClientId}&client_secret=${githubClientSecret}`
     );
     dispatch({ type: actionTypes.INITIAL_USERS, payload: response.data });
   };
@@ -29,7 +41,7 @@ const GithubState = props => {
     setLoading();
 
     const response = await axios.get(
-      `https://api.github.com/search/users?q=${user}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/search/users?q=${user}&client_id=${githubClientId}&client_secret=${githubClientSecret}`
     );
 
     dispatch({ type: actionTypes.SEARCH_USERS, payload: response.data.items });
@@ -40,7 +52,7 @@ const GithubState = props => {
     setLoading();
 
     const response = await axios.get(
-      `https://api.github.com/users/${userName}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/users/${userName}?client_id=${githubClientId}&client_secret=${githubClientSecret}`
     );
 
     dispatch({ type: actionTypes.GET_SINGLE_USER, payload: response.data });
@@ -51,7 +63,7 @@ const GithubState = props => {
     setLoading();
 
     const response = await axios.get(
-      `https://api.github.com/users/${userName}/repos?per_page=5&sort=created:asc&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/users/${userName}/repos?per_page=5&sort=created:asc&client_id=${githubClientId}&client_secret=${githubClientSecret}`
     );
 
     dispatch({ type: actionTypes.GET_REPOS, payload: response.data });
